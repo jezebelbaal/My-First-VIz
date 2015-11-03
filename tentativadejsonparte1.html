@@ -1,0 +1,35 @@
+<html>
+<head>
+	
+</head>
+
+<body>
+	<script>
+function transforma(theUrl)
+  {
+    var xmlhttp = null;
+
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open( "GET", theUrl, false );
+    xmlhttp.send( null );
+    var objarr = JSON.parse(xmlhttp.responseText);
+	var arr = [];
+
+	
+	return objarr;
+    
+  }
+ 
+  var arraygrandepracaralho;
+  var arraysmenores = [];
+  var text;
+
+  arraygrandepracaralho = transforma("https://input.mozilla.org/api/v1/feedback?happy=1");
+
+
+
+	window.alert(arraygrandepracaralho);
+  </script>
+
+</body>
+</html>
