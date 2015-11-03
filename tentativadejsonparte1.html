@@ -12,24 +12,55 @@ function transforma(theUrl)
     xmlhttp = new XMLHttpRequest();
     xmlhttp.open( "GET", theUrl, false );
     xmlhttp.send( null );
-    var objarr = JSON.parse(xmlhttp.responseText);
-	var arr = [];
-
-	
-	return objarr;
+    return xmlhttp.responseText;
     
   }
  
-  var arraygrandepracaralho;
-  var arraysmenores = [];
-  var text;
+    var registersparsed;
+  	var auxParser= [];
+  	var auxParserValues=[];
+  	var finalResults =[];
 
-  arraygrandepracaralho = transforma("https://input.mozilla.org/api/v1/feedback?happy=1");
+  	var auxtexto;
+
+  	//pega a string completa do httpget
+  	stringjson = transforma("https://input.mozilla.org/api/v1/feedback?happy=1&products=Firefox&versions=31.0&?date_start=2014-08-12&date_delta=30d");
+
+  	
+  	//separa o conteúdo
+  	var content = stringjson.substring(stringjson.lastIndexOf("[")+1,stringjson.lastIndexOf("]"));
+	
+
+	//separa cada conjunto de respostas, depois retira o colchete
+ 	registersparsed = content.split("{");
+ 	
+  	for(a in registersparsed){
+  		
+  		registersparsed[a] = registersparsed[a].substring(0,registersparsed[a].lastIndexOf("}"));
+
+  		auxParser[a] = registersparsed[a].split(","); 
+  		
+  	}
+  	for(a in auxParser){
 
 
+  		for(x in auxParser[a]){
 
-	window.alert(arraygrandepracaralho);
-  </script>
+  			auxParserValues = auxParser[a][x].split(":");
+  			finalResults[auxParserValues[0]] = auxParserValues[1];
+
+  			document.write("Nome do campo:" + auxParserValues[0] + "  Valor: " + auxParserValues[1] + "<br/><br/>" );
+  		}
+
+  		document.write("<h1>Próxima Entrada</h1>");
+
+  	}
+
+  	
+  
+
+  	
+	</script>
 
 </body>
 </html>
