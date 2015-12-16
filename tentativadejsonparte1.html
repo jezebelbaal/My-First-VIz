@@ -15,11 +15,17 @@ function transforma(theUrl)
     return xmlhttp.responseText;
     
   }
+
+	stringjson = transforma("https://input.mozilla.org/api/v1/feedback?happy=1&products=Firefox&versions=31.0&?date_start=2014-08-12&date_delta=30d");
+
+
  
-    var registersparsed;
-  	var auxParser= [];
+   /* var registersparsed;
+  	var entradaAux= [];
   	var auxParserValues=[];
   	var finalResults =[];
+  	var conteudocampo;
+
 
   	var auxtexto;
 
@@ -28,33 +34,51 @@ function transforma(theUrl)
 
   	
   	//separa o conteúdo
-  	var content = stringjson.substring(stringjson.lastIndexOf("[")+1,stringjson.lastIndexOf("]"));
-	
+  	var content = stringjson.substring(stringjson.lastIndexOf('{,'),stringjson.lastIndexOf("]"));
+	content =  content.substring(stringjson.lastIndexOf("url")-1);
 
 	//separa cada conjunto de respostas, depois retira o colchete
- 	registersparsed = content.split("{");
+ 	entrada = content.split("{");
+ 	document.write(entrada);
  	
-  	for(a in registersparsed){
-  		
-  		registersparsed[a] = registersparsed[a].substring(0,registersparsed[a].lastIndexOf("}"));
+ 	
+  	for(a in entrada){
 
-  		auxParser[a] = registersparsed[a].split(","); 
+
+  		var i = a-1;
+  		
+  		entrada[a] = entrada[a].substring(0,entrada[a].lastIndexOf("}"));
+
+		entradaAux[i] = entrada[a].split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1); 
+
   		
   	}
-  	for(a in auxParser){
 
 
-  		for(x in auxParser[a]){
+		
 
-  			auxParserValues = auxParser[a][x].split(":");
-  			finalResults[auxParserValues[0]] = auxParserValues[1];
+  /*	for(a in entrada){
 
-  			document.write("Nome do campo:" + auxParserValues[0] + "  Valor: " + auxParserValues[1] + "<br/><br/>" );
-  		}
 
-  		document.write("<h1>Próxima Entrada</h1>");
+  		for(x in entrada[a]){
 
-  	}
+  			if(typeof entrada[a][x] == undefined){
+
+  				continue;
+
+  			}else{
+
+  			conteudocampo = entrada[a][x].split(":");
+  				finalResults[a][conteudocampo[0]] = conteudocampo[1];
+  			}
+
+  			
+
+  		}	
+
+  		
+
+  	}*/
 
   	
   
