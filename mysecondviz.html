@@ -32,6 +32,33 @@ path {
     stroke-width: 1px;
 }
 
+#tooltip {
+        position: absolute;
+        width: 200px;
+        height: auto;
+        padding: 10px;
+        background-color: white;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+}
+
+#tooltip.hidden {
+        display: none;
+}
+
+#tooltip p {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+}
+
+
 </style>
 <body>
 
@@ -49,7 +76,7 @@ var margin = {top: 30, right: 20, bottom: 30, left: 50},
 // Parse the date / time
 var parseDate = d3.time.format("%d-%b-%y").parse;
 
-// Set the ranges
+// Set the dimensions
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
@@ -62,7 +89,8 @@ var xAxis = d3.svg.axis().scale(x)
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(10)
 
-//prepare the other axis
+//prepare grid
+
 function make_x_axis() {        
     return d3.svg.axis()
         .scale(x)
@@ -77,23 +105,9 @@ function make_y_axis() {
         .ticks(12)
 }
 
-//function to show dialog box
-function showDialog(){
 
-    d3.select("body").append("h1").html("test!");
-}
 
-// Define the line
-var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.feedback); })
-    
 
- // Define the line
-var valueline2 = d3.svg.line()
-    .x(function(d2) { return x(d2.date); })
-    .y(function(d2) { return y(d2.feedback); });
-    
 // Adds the svg canvas
 var svg = d3.select("body")
     .append("svg")
@@ -105,60 +119,78 @@ var svg = d3.select("body")
 
 // Get the data
 var dataHappy = [
-{date:"1-Jan-12",feedback:11},
+{date:"1-Jan-12",feedback:20},
 {date:"10-Jan-12",feedback:11},
 {date:"15-Jan-12",feedback:12},
 {date:"26-Jan-12",feedback:4},
+
 {date:"23-Feb-12",feedback:14},
-{date:"24-Apr-12",feedback:8},
-{date:"25-Apr-12",feedback:12},
-{date:"19-May-12",feedback:13},
-{date:"20-May-12",feedback:5},
-{date:"22-May-12",feedback:16},
+
+{date:"14-Apr-12",feedback:88},
+{date:"25-Apr-12",feedback:42},
+
+{date:"9-May-12",feedback:13},
+{date:"20-May-12",feedback:55},
+{date:"27-May-12",feedback:16},
+
 {date:"11-Jun-12",feedback:4},
-{date:"12-Jun-12",feedback:15},
-{date:"13-Jun-12",feedback:15},
-{date:"14-Jul-12",feedback:5},
-{date:"17-Jul-12",feedback:16},
-{date:"20-Jul-12",feedback:7},
+{date:"22-Jun-12",feedback:15},
+{date:"30-Jun-12",feedback:15},
+
+{date:"11-Jul-12",feedback:5},
+{date:"22-Jul-12",feedback:16},
+{date:"27-Jul-12",feedback:7},
 {date:"29-Jul-12",feedback:13},
+
 {date:"4-Aug-12",feedback:4},
-{date:"5-Aug-12",feedback:2},
+{date:"15-Aug-12",feedback:2},
+
 {date:"2-Sep-12",feedback:0},
 {date:"3-Sep-12",feedback:11},
+
+{date:"27-Oct-12",feedback:10},
 {date:"29-Oct-12",feedback:5},
-{date:"30-Oct-12",feedback:10},
-{date:"27-Oct-12",feedback:2},
+{date:"30-Oct-12",feedback:2},
+
 {date:"28-Nov-12",feedback:0},
 {date:"30-Dec-12",feedback:1}
 ];
 
-var data = [
-{date:"1-Jan-12",feedback:58},
+var dataSad = [
+{date:"5-Jan-12",feedback:58},
 {date:"10-Jan-12",feedback:53},
 {date:"15-Jan-12",feedback:67},
 {date:"26-Jan-12",feedback:89},
+
 {date:"23-Feb-12",feedback:99},
-{date:"24-Apr-12",feedback:00},
+
+{date:"24-Apr-12",feedback:100},
 {date:"25-Apr-12",feedback:120},
-{date:"19-May-12",feedback:30},
-{date:"20-May-12",feedback:45},
-{date:"22-May-12",feedback:34},
-{date:"11-Jun-12",feedback:54},
-{date:"12-Jun-12",feedback:18},
-{date:"13-Jun-12",feedback:20},
-{date:"14-Jul-12",feedback:22},
-{date:"17-Jul-12",feedback:26},
-{date:"20-Jul-12",feedback:62},
+
+{date:"19-May-12",feedback:80},
+{date:"20-May-12",feedback:95},
+{date:"22-May-12",feedback:134},
+
+{date:"11-Jun-12",feedback:200},
+{date:"12-Jun-12",feedback:318},
+{date:"13-Jun-12",feedback:420},
+{date:"14-Jul-12",feedback:322},
+{date:"17-Jul-12",feedback:226},
+{date:"20-Jul-12",feedback:262},
 {date:"29-Jul-12",feedback:500},
+
 {date:"4-Aug-12",feedback:63},
 {date:"5-Aug-12",feedback:32},
+
 {date:"2-Sep-12",feedback:29},
 {date:"3-Sep-12",feedback:18},
-{date:"29-Oct-12",feedback:59},
-{date:"30-Oct-12",feedback:28},
-{date:"27-Oct-12",feedback:21},
+
+{date:"26-Oct-12",feedback:59},
+{date:"28-Oct-12",feedback:28},
+{date:"30-Oct-12",feedback:21},
+
 {date:"28-Nov-12",feedback:36},
+
 {date:"30-Dec-12",feedback:40}
 ];
 
@@ -166,7 +198,7 @@ var data = [
 //d3.csv("data.csv", function(error, data) {
 
 
-   data.forEach(function(d) {
+   dataSad.forEach(function(d) {
         d.date = parseDate(d.date);
         d.feedback = +d.feedback;
     });
@@ -178,8 +210,8 @@ var data = [
 
 
     // Scale the range of the data
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.feedback; })]);
+    x.domain(d3.extent(dataSad, function(d) { return d.date; }));
+    y.domain([0, d3.max(dataSad, function(d) { return d.feedback; })]);
 
 
 
@@ -199,37 +231,58 @@ var data = [
             .tickFormat("")
         )
 
-    
+    //
+
     var lineGen = d3.svg.line()
     .x(function(d) {
         return x(d.date);
     })
+
     .y(function(d) {
         return y(d.feedback);
-    })
+    }).interpolate("monotone");
 
 
-    .interpolate("basis");
+
+    //adds line to svg
     svg.append('svg:path')
 
     .attr("id", "p1")
-    .attr('d', 0)
-    .attr('stroke', 'blue')
-    .attr('stroke-width', 2)
-    .attr('fill', 'none')
-    .attr('d', lineGen(data));
-    
-    
-
-    svg.append('svg:path')
-
-    .attr("id", "p2")
+    .attr("class", "dataLines")
     .attr('stroke', 'red')
     .attr('stroke-width', 2)
     .attr('fill', 'none')
-     .attr('d', lineGen(dataHappy));
+    .attr('d', lineGen(dataSad));
+
+
+    //adds line 2 to svg
+    svg.append('svg:path')
+
+    .attr("id", "p2")
+    .attr("class", "dataLines")
+    .attr('stroke', 'blue')
+    .attr('stroke-width', 2)
+    .attr('fill', 'none')
+    .attr('d', lineGen(dataHappy));
+
+
+    //creates the dots at the line
     
-    
+    svg.selectAll("dot")
+        .data(dataHappy)
+    .enter().append("circle")
+        .attr("r", 3)
+        .attr("class", "happyDots")
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.feedback); });
+
+    svg.selectAll("dot")
+        .data(dataSad)
+        .enter().append("circle")
+        .attr("r", 3)
+        .attr("class", "sadDots")
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.feedback); });
 
 
    // Add the X Axis
@@ -243,9 +296,8 @@ var data = [
         .attr("class", "y axis")
         .call(yAxis);
 
+    
     //release day
-    
-    
     svg.append("line")
     .attr("stroke", "orange")
     .attr("y1", y(0))
@@ -254,9 +306,91 @@ var data = [
     .attr("x2", 256);
 
 
+
+
+
+    function showTooltip(d, mood){
+
+
+        
+    }
+
+
+
+
+    //adds a listener to sad dots
+
+    d3.selectAll(".sadDots")
+    .on("mouseover", function(d) {
+
+        //defining position
+        var xPosition = parseFloat(this.cx.baseVal.value) + margin.top;
+        var yPosition = parseFloat(this.cy.baseVal.value) + margin.left;
+
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+          .style("left", xPosition + "px")
+          .style("top", yPosition + "px");
+
+        d3.select("#value")
+          .html("Date:" + x.invert(this.cx.baseVal.value) + "<br/>"); 
+           
+        d3.select("#tooltipTitle")
+          .html("<b>Sad Feedbacks:</b> " + Math.round(y.invert(parseFloat(this.cy.baseVal.value)), 0));
+     
+
+          d3.select("#tooltip").classed("hidden", false);
+       
+    })
+
+    .on("mouseout", function() {
+
+    d3.select("#tooltip").classed("hidden", true);
+
+    });
+
+    //adds a listener to happy dots
+
+    d3.selectAll(".happyDots").on("mouseover", function(d) {
+
+       //defining position
+        var xPosition = parseFloat(this.cx.baseVal.value) + margin.top;
+        var yPosition = parseFloat(this.cy.baseVal.value) + margin.left;
+
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+          .style("left", xPosition + "px")
+          .style("top", yPosition + "px");
+
+         d3.select("#value")
+          .html("Date:" + x.invert(this.cx.baseVal.value) + "<br/>");
+           
+        d3.select("#tooltipTitle")
+          .html("<b>Happy Feedbacks:</b> " + Math.round(y.invert(parseFloat(this.cy.baseVal.value)), 0));
+
+     
+
+          d3.select("#tooltip").classed("hidden", false);
+    })
+
+    .on("mouseout", function() {
+
+      d3.select("#tooltip").classed("hidden", true);
+
+    });
+
+
+
     
 
 //});
 
 </script>
+
+<div id="tooltip" class="hidden">
+        <p id="tooltipTitle"><strong></strong></p>
+        <p><span id="value">100</span></p>
+</div>
+
+
 </body>
